@@ -33,13 +33,12 @@ docker exec -it chartchai_db psql -U chartchai postgres
 
 ### A typical top-level directory layout
 
-    .
-    ├── config                  # Config files (ex: config dotenv)
-    ├── model                   # Model files (storage model for sequelize (ORM))
-    ├── repository              # Repository files (storage sequelize command between query and  model)
+    .app
+    ├── controllers             # Controller files
+    ├── models                  # Model files (storage model for sequelize (ORM))
     ├── routes                  # Routes files (path for api)
     ├── test                    # Automated tests (unit test)
-    └── README.md
+    ├── util                    # Storage config
     └── ...
 
 ### Automated tests
@@ -47,6 +46,6 @@ docker exec -it chartchai_db psql -U chartchai postgres
     .
     ├── ...
     ├── test                    # Test files (alternatively `spec` or `tests`)
-
-    │   └── unit                # Unit tests
+    │   └── controllers         # tests controllers
+    │   └── routes              # tests routes
     └── ...

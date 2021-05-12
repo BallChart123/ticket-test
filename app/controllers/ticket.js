@@ -1,6 +1,5 @@
 const Ticket = require('../models/ticket');
-const nowDate = Date.now();
-
+const VALID_STATUS = ['pending', 'accepted', 'resolved', 'rejected'];
 /**
  * CRUD CONTROLLERS
  */
@@ -12,7 +11,9 @@ exports.createOne = async (req, res, next) => {
         const ticketObject = {
             name: req.body.name,
             description: req.body.description,
-            status: req.body.status,
+            status: VALID_STATUS.includes(req.body.status)
+                ? req.body.status
+                : 'pending',
             contact_information: req.body.information,
             created_by: req.body.name,
             created_on: Date.now(),
@@ -69,7 +70,9 @@ exports.updateOne = async (req, res, next) => {
         const ticketObject = {
             name: req.body.name,
             description: req.body.description,
-            status: req.body.status,
+            status: VALID_STATUS.includes(req.body.status)
+                ? req.body.status
+                : 'accepted',
             contact_information: req.body.information,
             updated_by: req.body.name,
             updated_on: Date.now()
