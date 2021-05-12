@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  ticket_backend:
+    container_name: ticket_backend
+    image: chartchai/ticket-template:0.0.2
+    build:
+      context: .
+    ports:
+      - "3001:3001"
+    environment:
+      - EXTERNAL_PORT=3001
+      - PGUSER=chartchai
+      - PGPASSWORD=12345
+      - PGDATABASE=chartchai_database
+      - PGHOST=chartchai_db # NAME OF THE SERVICE
+    depends_on:
+      - chartchai_db
+  chartchai_db:
+    container_name: chartchai_db
+    image: "postgres:12"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=chartchai
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=chartchai_database
+    volumes:
+      - chartchai_data:/var/lib/postgresql/data
+volumes:
+  chartchai_data: {}
