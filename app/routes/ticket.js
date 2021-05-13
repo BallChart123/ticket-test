@@ -1,4 +1,4 @@
-const controller = require('../controllers/' + 'ticket');
+const controller = require('../controllers/ticket');
 const router = require('express').Router();
 
 //CRUD Model-Agnostic.

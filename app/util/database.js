@@ -10,5 +10,14 @@ if (process.env.LOCALBASE === 'DEV') {
             dialect: 'postgres'
         }
     );
+} else {
+    sequelize = new Sequelize('sqlite::memory:', {
+        logging: false,
+        dialectOptions: {
+            useUTC: true,
+            dateStrings: true,
+            typeCast: true
+        }
+    });
 }
 module.exports = sequelize;

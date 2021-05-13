@@ -26,12 +26,16 @@ app.use((req, res, next) => {
 app.use('/ticket', require('./routes/ticket')); //users crud
 
 (async () => {
-    try {
-        await sequelize.sync(
-            { force: false } //Reset db every time
-        );
-        app.listen(process.env.EXTERNAL_PORT); //DEF in docker.compose.yml
-    } catch (error) {
-        console.log(error);
+    if (process.env.LOCALBASE === 'DEV') {
+        try {
+            await sequelize.sync(
+                { force: false } //Reset db every time
+            );
+            app.listen(process.env.EXTERNAL_PORT); //DEF in docker.compose.yml
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        app.listen(4000); //DEF in docker.compose.yml
     }
 })();
