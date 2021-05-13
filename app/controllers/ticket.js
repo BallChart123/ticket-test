@@ -4,8 +4,15 @@ const VALID_STATUS = ['pending', 'accepted', 'resolved', 'rejected'];
  * CRUD CONTROLLERS
  */
 
+const buildResponse = (statusCode, body) => {
+    const response = {
+        statusCode,
+        body: JSON.stringify(body)
+    };
+    return response;
+};
 //CREATE-ONE
-exports.createOne = async (req, res, next) => {
+exports.createOne = async (req, res) => {
     console.log('createOne: [POST] /tickets/');
     try {
         const ticketObject = {
@@ -20,22 +27,17 @@ exports.createOne = async (req, res, next) => {
             updated_by: null,
             updated_on: null
         };
-
-        try {
-            const created = await Ticket.create(ticketObject);
-            console.log('OK createOne Ticket: ', created);
-            return res.status(201).json(created);
-        } catch (error) {
-            console.log('ERROR in createOne ' + 'Ticket:', error);
-            return res.status(500).json(error);
-        }
+        const created = await Ticket.create(ticketObject);
+        console.log('OK createOne Ticket: ', created);
+        return buildResponse(200, created.dataValues);
     } catch (error) {
-        return res.status(400).json('Bad Request');
+        console.log('ERROR in createOne ' + 'Ticket:', error);
+        return res.status(500).json(error);
     }
 };
 
 //GET-ALL
-exports.getAll = async (req, res, next) => {
+exports.getAll = async (res) => {
     console.log('getAll: [GET] /ticket/');
     try {
         const getAllTicket = await Ticket.findAll();
@@ -43,7 +45,10 @@ exports.getAll = async (req, res, next) => {
             'OK getAll Ticket: ',
             getAllTicket.map((el) => el.dataValues)
         );
-        return res.status(200).json(getAllTicket);
+        return buildResponse(
+            200,
+            getAllTicket.map((el) => el.dataValues)
+        );
     } catch (error) {
         console.log('ERROR in getAll ' + 'Ticket:', error);
         return res.status(500).json(error);
@@ -56,7 +61,7 @@ exports.getOne = async (req, res, next) => {
     try {
         const getTicket = await ticket.findByPk(req.params.id);
         console.log('OK getOne Ticket: ', getTicket.dataValues);
-        return res.status(200).json(getTicket);
+        return buildResponse(200, getAllTicket.dataValues);
     } catch (error) {
         console.log('ERROR in getOne ' + 'Ticket:', error);
         return res.status(500).json(error);
@@ -78,18 +83,14 @@ exports.updateOne = async (req, res, next) => {
             updated_on: Date.now()
         };
 
-        try {
-            const updated = await Ticket.update(ticketObject, {
-                where: { id: req.params.id }
-            });
-            console.log('OK updateOne Ticket: ', updated);
-            return res.status(200).json(updated);
-        } catch (error) {
-            console.log('ERROR in updateOne ' + 'Ticket:', error);
-            return res.status(500).json(error);
-        }
+        const updated = await Ticket.update(ticketObject, {
+            where: { id: req.params.id }
+        });
+        console.log('OK updateOne Ticket: ', updated);
+        return buildResponse(200, updated);
     } catch (error) {
-        return res.status(400).json('Bad Request');
+        console.log('ERROR in updateOne ' + 'Ticket:', error);
+        return res.status(500).json(error);
     }
 };
 
