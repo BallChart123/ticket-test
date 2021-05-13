@@ -1,6 +1,14 @@
 # ticket-test
 
+# Postman Collection
+
+You Can Also Import to your Postman
+
+`test.postman_collection.json`
+
 # Command Run Docker
+
+Start Docker First Before Build
 
 To Build image
 
@@ -27,9 +35,21 @@ docker exec -it chartchai_db psql -U chartchai postgres
 
 ```
 
+To Stop Service
+
+```
+docker-compose down
+```
+
 # Folder Structure Conventions
 
 > Folder structure options and naming conventions for software projects
+
+You Can Also run test
+
+```
+npm test
+```
 
 ### A typical top-level directory layout
 

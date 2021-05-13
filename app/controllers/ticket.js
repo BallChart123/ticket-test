@@ -7,7 +7,7 @@ const VALID_STATUS = ['pending', 'accepted', 'resolved', 'rejected'];
 const buildResponse = (statusCode, body) => {
     const response = {
         statusCode,
-        body: JSON.stringify(body)
+        body
     };
     return response;
 };
@@ -32,7 +32,7 @@ exports.createOne = async (req, res) => {
         return buildResponse(200, created.dataValues);
     } catch (error) {
         console.log('ERROR in createOne ' + 'Ticket:', error);
-        return res.status(500).json(error);
+        return buildResponse(500, error);
     }
 };
 
@@ -51,7 +51,7 @@ exports.getAll = async (res) => {
         );
     } catch (error) {
         console.log('ERROR in getAll ' + 'Ticket:', error);
-        return res.status(500).json(error);
+        return buildResponse(500, error);
     }
 };
 
@@ -59,12 +59,12 @@ exports.getAll = async (res) => {
 exports.getOne = async (req, res, next) => {
     console.log('getOne: [GET] /ticket/:id');
     try {
-        const getTicket = await ticket.findByPk(req.params.id);
+        const getTicket = await Ticket.findByPk(req.params.id);
         console.log('OK getOne Ticket: ', getTicket.dataValues);
-        return buildResponse(200, getAllTicket.dataValues);
+        return buildResponse(200, getTicket.dataValues);
     } catch (error) {
         console.log('ERROR in getOne ' + 'Ticket:', error);
-        return res.status(500).json(error);
+        return buildResponse(500, error);
     }
 };
 
@@ -87,10 +87,11 @@ exports.updateOne = async (req, res, next) => {
             where: { id: req.params.id }
         });
         console.log('OK updateOne Ticket: ', updated);
-        return buildResponse(200, updated);
+        const message = 'Update Success !';
+        return buildResponse(200, message);
     } catch (error) {
         console.log('ERROR in updateOne ' + 'Ticket:', error);
-        return res.status(500).json(error);
+        return buildResponse(500, error);
     }
 };
 
@@ -100,9 +101,10 @@ exports.deleteOne = async (req, res, next) => {
     try {
         const deleted = await Ticket.destroy({ where: { id: req.params.id } });
         console.log('OK deleteOne Ticket: ', deleted);
-        return res.status(200).json(deleted);
+        const message = 'Delete Success !';
+        return buildResponse(200, message);
     } catch (error) {
         console.log('ERROR in deleteOne ' + 'Ticket:', error);
-        return res.status(500).json(error);
+        return buildResponse(500, error);
     }
 };
